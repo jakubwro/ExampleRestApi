@@ -1,0 +1,35 @@
+version: '2.1'
+
+services:
+  redis:
+    image: redis
+    container_name: kvs
+    expose:
+      - 6379
+  postgres:
+    image: postgres
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: zaq12wsx
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/001-schema.sql
+    expose:
+      - 5432
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  python:
+    image: python
+    build: .
+    ports:
+      - 3000:3000
+    links:
+      - redis
+      - postgres
+  tests:
+    image: python
+    container_name: tests
+    command: python3 -m unittest test.gamesaves_test
