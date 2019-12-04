@@ -39,8 +39,9 @@ class GameSave(Resource):
             rows = self.db.query("select gamesave from gamesaves where id='" + gamesave_id + "'").getresult()
             if len(rows) == 0:
                 return None, 404
-            gamesave = rows[0].gamesave
+            gamesave = rows[0][0]
             self.kv.set(gamesave_id, gamesave)
+            self.kv.expire(gamesave_id, self.config.cache_expiration)
         else:
             gamesave = self.kv.get(gamesave_id)
         return json.loads(gamesave), 200

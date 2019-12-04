@@ -35,8 +35,7 @@ class GameSaveResourceTest(unittest.TestCase):
         cache_expiration = 999
 
         db = Object()
-        row = Object()
-        row.gamesave = gamesave
+        row = (gamesave,)
         queryresult = Object()
         queryresult.getresult = MagicMock(return_value=[row])
         db.query = MagicMock(return_value=queryresult)

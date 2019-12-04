@@ -4,5 +4,5 @@ CREATE DATABASE api_storage;
 
 CREATE TABLE gamesaves (
   "id" uuid PRIMARY KEY NOT NULL,
-  "gamesave" json NOT NULL
+  "gamesave" TEXT NOT NULL
 );
