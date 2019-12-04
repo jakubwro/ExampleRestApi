@@ -1,5 +1,5 @@
 import json
-from flask_restful import Resource
+from flask_restful import request, Resource
 from flask_restful.reqparse import RequestParser
 from injector import inject
 from redis import Redis
@@ -44,3 +44,10 @@ class GameSave(Resource):
         else:
             gamesave = self.kv.get(gamesave_id)
         return json.loads(gamesave), 200
+    
+    def put(self, gamesave_id):
+        gamesave = request.form['gamesave']
+        self.db.query("update gamesaves set gamesave = '" + gamesave + "' where id = '" + gamesave_id + "'")       
+        self.kv.set(gamesave_id, gamesave)
+        self.kv.expire(gamesave_id, self.config.cache_expiration)
+        return gamesave_id, 200
